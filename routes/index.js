@@ -25,9 +25,9 @@ router.post('/adduser', function(req, res) {
 
     // Set our internal DB variable
     var db = req.db;
-
     // Get our form values. These rely on the "name" attributes
-    var userName = req.body.username;
+    var firstname = req.body.firstname;
+    var lastmane = req.body.lastmane;
     var userEmail = req.body.useremail;
 
     // Set our collection
@@ -35,7 +35,8 @@ router.post('/adduser', function(req, res) {
 
     // Submit to the DB
     collection.insert({
-        "username" : userName,
+        "firstname" : firstname,
+        "lastmane" : lastmane,
         "email" : userEmail
     }, function (err, doc) {
         if (err) {
