@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var validator = require('validator');
 
 
 
@@ -31,26 +32,40 @@ router.post('/adduser', function(req, res) {
     var userEmail = req.body.useremail;
 
     // Set our collection
-    var collection = db.get('usercollection');
+    if (validator.isEmail('foo@bar.com')) {
+        var collection = db.get('usercollection');
+        collection.find({email:userEmail},function(error,data){
+            // Submit to the DB
+            usr=data;
+            if(!error && !usr.length){
+                collection.insert({
+                    "firstname": firstname,
+                    "lastname": lastname,
+                    "email": userEmail,
+                    "created_at": new Date()
+                }, function (err, doc) {
+                    if (err) {
+                        // If it failed, return error
+                        res.send("There was a problem adding the information to the database.");
+                    }
+                    else {
+                        // If it worked, set the header so the address bar doesn't still say /adduser
+                        //res.location("userlist");
+                        // And forward to success page
+                        res.redirect("userlist");
+                    }
+                });
 
-    // Submit to the DB
-    collection.insert({
-        "firstname" : firstname,
-        "lastname" : lastname,
-        "email" : userEmail,
-        "created_at":new Date()
-    }, function (err, doc) {
-        if (err) {
-            // If it failed, return error
-            res.send("There was a problem adding the information to the database.");
-        }
-        else {
-            // If it worked, set the header so the address bar doesn't still say /adduser
-            //res.location("userlist");
-            // And forward to success page
-            res.redirect("userlist");
-        }
-    });
+            }
+            else{   res.redirect("/");
+
+            }
+
+        });
+
+    }
+    else    res.redirect("/");
+
 });
 
 module.exports = router;
