@@ -4,11 +4,12 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
+require('dotenv').config();
+console.log(process.env.DBNAME)
 // New Code
 var mongo = require('mongodb');
 var monk = require('monk');
-var db = monk('localhost:27017/divsbhalala');
+var db = monk('localhost:27017/'+process.env.DBNAME);
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
